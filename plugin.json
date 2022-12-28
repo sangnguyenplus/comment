@@ -1,0 +1,10 @@
+{
+    "id": "sangnguyenplus/comment",
+    "name": "Comment",
+    "namespace": "Botble\\Comment\\",
+    "provider": "Botble\\Comment\\Providers\\CommentServiceProvider",
+    "author": "Sang Nguyen",
+    "url": "https://sangplus.com",
+    "version": "1.0.0",
+    "description": "Ajax Comments"
+}
