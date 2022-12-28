@@ -1,4 +1,7 @@
 # Overview
+
+This plugin is customized from https://github.com/baoboine/botble-comment.
+
 This is a plugin for Botble CMS so you have to purchase Botble CMS first to use this plugin.
 Purchase it here: [https://codecanyon.net/item/botble-cms-php-platform-based-on-laravel-framework/16928182](https://1.envato.market/LWRBY)
 
