@@ -7,9 +7,8 @@ axios.defaults.headers.common.Accept = 'application/json';
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.interceptors.request.use(function (config) {
     const AUTH_TOKEN = Ls.get('auth.token');
-
     if (AUTH_TOKEN) {
-        config.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`
+        config.headers['Authorization'] = `Bearer ${AUTH_TOKEN}`
     }
 
     return config

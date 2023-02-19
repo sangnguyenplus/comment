@@ -30,7 +30,7 @@ if (mix.inProduction()) {
 }
 
 mix
-    .js(source + '/resources/assets/js/comment.js', dist + '/js')
+    .js(source + '/resources/assets/js/comment.js', dist + '/js').vue()
     .sass(source + '/resources/assets/sass/comment.scss', dist + '/css', {}, filterCss)
 
     .js(source + '/resources/assets/js/comment-setting.js', dist + '/js')

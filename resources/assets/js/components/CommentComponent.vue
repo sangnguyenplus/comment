@@ -1,7 +1,7 @@
 <template>
     <div class="bb-comment">
-        <comment-header :recommend="recommend"/>
-        <comment-box :on-success="onPostCommentSuccess"/>
+        <CommentHeader :recommend="recommend" />
+        <CommentBox :on-success="onPostCommentSuccess" />
         <div class="bb-loading" v-if="isLoading"></div>
         <div class="bb-comment-list" v-if="!isLoading">
             <comment-item
@@ -12,7 +12,10 @@
                 :openLoginForm="openLoginForm"
             />
 
-            <div class="bb-comment-list-empty text-center" v-if="!comments.length">
+            <div
+                class="bb-comment-list-empty text-center"
+                v-if="!comments.length"
+            >
                 <p>{{ __("Become the first to comment") }}</p>
             </div>
         </div>
@@ -37,7 +40,9 @@
             <button
                 v-if="reactive.attrs.last_page > reactive.attrs.current_page"
                 @click="loadMoreComments"
-                :class="'btn btn-secondary' + (isLoadMore ? ' button-loading' : '')"
+                :class="
+                    'btn btn-secondary' + (isLoadMore ? ' button-loading' : '')
+                "
             >
                 {{ __("Load More") }}
             </button>
@@ -52,7 +57,7 @@
 <script>
 import CommentBox from "./partials/CommentBox";
 import CommentItem from "./partials/CommentItem";
-import CommentHeader from "./partials/CommentHeader";
+import CommentHeader from "./partials/CommentHeader.vue";
 import ConfirmDialog from "./partials/ConfirmDialog";
 import LoginForm from "./partials/LoginForm";
 import Http from "../service/http";
@@ -71,7 +76,7 @@ export default {
             reactive: {
                 userData: null,
                 attrs: null,
-                sort: 'newest',
+                sort: "newest",
             },
             confirmDialogData: null,
             showLoginForm: false,
@@ -147,7 +152,7 @@ export default {
     },
     methods: {
         async getCurrentUserData() {
-            if (Ls.get('auth.token')) {
+            if (Ls.get("auth.token")) {
                 this.setSoftLoading(true);
                 const res = await Http.post(this.userUrl);
                 this.reactive.userData = res.data.data;
@@ -166,7 +171,7 @@ export default {
                     _t: new Date().getTime(),
                     ...params,
                 },
-            }).then(({data}) => {
+            }).then(({ data }) => {
                 if (data.error) {
                     this.error = true;
                     return;
@@ -195,7 +200,9 @@ export default {
                     },
                     (data) => {
                         this.isLoadMore = false;
-                        this.comments = this.comments.concat(data.data.comments);
+                        this.comments = this.comments.concat(
+                            data.data.comments
+                        );
                         this.reactive.attrs = {
                             ...data.data.attrs,
                             count_all: this.reactive.attrs.count_all,
@@ -264,7 +271,7 @@ export default {
                     if (res.data.error) {
                         cb();
                     } else {
-                        Ls.set('auth.token', res.data.data.token);
+                        Ls.set("auth.token", res.data.data.token);
                         await this.getCurrentUserData();
                     }
                 }
@@ -279,7 +286,7 @@ export default {
     },
     mounted: function () {
         this.loadComments();
-        if (!Ls.get('auth.token')) {
+        if (!Ls.get("auth.token")) {
             this.checkCurrentUser(() => {});
         }
     },
