@@ -34,7 +34,7 @@ class BbComment
             ],
             'auth.providers.' . COMMENT_GUARD => [
                 'driver' => 'eloquent',
-                'model' => get_class($this->getModel()),
+                'model' => CommentUser::class,
             ],
         ]);
 
@@ -50,15 +50,15 @@ class BbComment
 
     public function checkCurrentUser(): bool
     {
-        if (auth(COMMENT_GUARD)->check()) {
+        $user = $this->getCurrentUser();
+
+        if ($user && ! auth(COMMENT_GUARD)->check()) {
+            auth(COMMENT_GUARD)->loginUsingId($user->getAuthIdentifier());
+
             return true;
         }
 
-        if (is_plugin_active('member')) {
-            return auth('member')->check();
-        }
-
-        return auth()->check();
+        return (bool)$user;
     }
 
     public function getCurrentUser(): Authenticatable|null

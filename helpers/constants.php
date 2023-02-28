@@ -5,7 +5,7 @@ if (! defined('COMMENT_MODULE_SCREEN_NAME')) {
 }
 
 if (! defined('COMMENT_GUARD')) {
-    define('COMMENT_GUARD', 'members');
+    define('COMMENT_GUARD', 'comment');
 }
 
 if (! defined('COMMENT_USER_MODULE_SCREEN_NAME')) {
