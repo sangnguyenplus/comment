@@ -2,9 +2,11 @@
 
 namespace Botble\Comment\Providers;
 
+use BbComment;
 use Botble\Base\Supports\Helper;
 use Botble\Base\Traits\LoadAndPublishDataTrait;
 use Botble\Blog\Models\Post;
+use Botble\Comment\Facades\BbCommentFacade;
 use Botble\Comment\Models\Comment;
 use Botble\Comment\Models\CommentLike;
 use Botble\Comment\Models\CommentRecommend;
@@ -17,11 +19,11 @@ use Botble\Comment\Repositories\Eloquent\CommentRepository;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
 use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
-use Botble\Member\Models\Member;
 use Botble\Page\Models\Page;
 use EmailHandler;
 use Event;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -46,16 +48,10 @@ class CommentServiceProvider extends ServiceProvider
             return new CommentRecommendCacheDecorator(new CommentRecommendRepository(new CommentRecommend()));
         });
 
-        config([
-            'auth.guards.' . COMMENT_GUARD => [
-                'driver' => 'session',
-                'provider' => COMMENT_GUARD,
-            ],
-            'auth.providers.' . COMMENT_GUARD => [
-                'driver' => 'eloquent',
-                'model' => Member::class,
-            ],
-        ]);
+        AliasLoader::getInstance()->alias('BbComment', BbCommentFacade::class);
+
+        BbComment::setAuthProvider();
+
         $this->configureRateLimiting();
     }
 

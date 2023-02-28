@@ -16,7 +16,7 @@ class NewCommentListener implements ShouldQueue
 
         $mailer = EmailHandler::setModule(COMMENT_MODULE_SCREEN_NAME)
             ->setVariableValues([
-                'user_name' => $event->member->name,
+                'user_name' => $event->user->name,
                 'post_name' => $article->name,
                 'post_link' => $article->url,
                 'comment_content' => $event->comment->comment,

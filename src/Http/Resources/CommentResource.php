@@ -8,6 +8,8 @@ class CommentResource extends JsonResource
 {
     public function toArray($request): array
     {
+        $this->loadMissing('user');
+
         return [
             'id' => $this->id,
             'comment' => $this->comment,

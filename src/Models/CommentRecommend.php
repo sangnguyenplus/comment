@@ -12,5 +12,6 @@ class CommentRecommend extends BaseModel
         'reference_id',
         'reference_type',
         'user_id',
+        'user_type',
     ];
 }

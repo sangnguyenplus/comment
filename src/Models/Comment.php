@@ -4,11 +4,9 @@ namespace Botble\Comment\Models;
 
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
-use Botble\Member\Models\Member;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends BaseModel
@@ -23,6 +21,7 @@ class Comment extends BaseModel
         'reference_type',
         'ip_address',
         'user_id',
+        'user_type',
         'status',
         'parent_id',
         'reply_count',
@@ -62,9 +61,9 @@ class Comment extends BaseModel
         });
     }
 
-    public function user(): HasOne
+    public function user(): MorphTo
     {
-        return $this->hasOne(Member::class, 'id', 'user_id')->withDefault();
+        return $this->morphTo('user')->withDefault();
     }
 
     public function reference(): MorphTo

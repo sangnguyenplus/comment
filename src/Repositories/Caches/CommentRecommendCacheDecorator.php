@@ -7,7 +7,7 @@ use Botble\Support\Repositories\Caches\CacheAbstractDecorator;
 
 class CommentRecommendCacheDecorator extends CacheAbstractDecorator implements CommentRecommendInterface
 {
-    public function getRecommendOfArticle(array $reference, $user)
+    public function getRecommendOfArticle(array $reference, $user): array
     {
         return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }

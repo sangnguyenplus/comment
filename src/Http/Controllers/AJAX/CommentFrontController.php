@@ -2,6 +2,8 @@
 
 namespace Botble\Comment\Http\Controllers\AJAX;
 
+use BbComment;
+use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
@@ -12,8 +14,6 @@ use Botble\Comment\Models\Comment;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
 use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
-use Botble\Comment\Supports\CheckMemberCredentials;
-use Botble\Member\Repositories\Interfaces\MemberInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -22,20 +22,10 @@ use RvMedia;
 
 class CommentFrontController extends BaseController
 {
-    protected BaseHttpResponse $response;
-
-    protected CommentInterface $commentRepository;
-
-    protected CheckMemberCredentials $memberCredentials;
-
     public function __construct(
-        BaseHttpResponse $response,
-        CommentInterface $commentRepository,
-        CheckMemberCredentials $memberCredentials
+        protected BaseHttpResponse $response,
+        protected CommentInterface $commentRepository
     ) {
-        $this->response = $response;
-        $this->commentRepository = $commentRepository;
-        $this->memberCredentials = $memberCredentials;
     }
 
     public function postComment(Request $request): BaseHttpResponse
@@ -43,7 +33,7 @@ class CommentFrontController extends BaseController
         $validate = $this->validator($request->input());
         if ($validate->fails()) {
             return $this->response
-                ->setMessage($validate->getMessageBag())
+                ->setMessage($validate->getMessageBag()->first())
                 ->setError();
         }
 
@@ -59,13 +49,16 @@ class CommentFrontController extends BaseController
             [
                 'ip_address' => $request->ip(),
                 'user_id' => $user->getAuthIdentifier(),
+                'user_type' => BbComment::getCurrentUser() ? get_class(BbComment::getCurrentUser()) : User::class,
                 'status' => setting('comment_moderation') ? BaseStatusEnum::PENDING : BaseStatusEnum::PUBLISHED,
             ],
             $reference
         ));
+
         $comment = $this->commentRepository->storageComment($request->only([
             'ip_address',
             'user_id',
+            'user_type',
             'reference_id',
             'reference_type',
             'reference',
@@ -115,7 +108,8 @@ class CommentFrontController extends BaseController
                 ->setError()
                 ->setMessage(__('Invalid reference'));
         }
-        $user = $this->memberCredentials->handle();
+
+        $user = BbComment::getCurrentUser();
         $parentId = $request->input('up', 0);
         $page = $request->input('page', 1);
         $limit = $request->input('limit', 5);
@@ -154,7 +148,7 @@ class CommentFrontController extends BaseController
         if (! $comment || $comment->user_id !== $userId) {
             return $this->response
                 ->setError()
-                ->setMessage(__('You don\'t have permission with this comment'));
+                ->setMessage(__("You don't have permission with this comment"));
         }
 
         $this->commentRepository->delete($comment);
@@ -177,7 +171,7 @@ class CommentFrontController extends BaseController
             ->setMessage($liked ? __('Like successfully') : __('Unlike successfully'));
     }
 
-    public function changeAvatar(Request $request, MemberInterface $commentUserRepo, BaseHttpResponse $response)
+    public function changeAvatar(Request $request, BaseHttpResponse $response)
     {
         $validator = Validator::make($request->all(), [
             'photo' => 'required|image|mimes:jpg,jpeg,png',
@@ -191,11 +185,11 @@ class CommentFrontController extends BaseController
         }
 
         try {
-            $file = RvMedia::handleUpload($request->file('photo'), 0, 'members');
+            $file = RvMedia::handleUpload($request->file('photo'), 0, 'comments');
             if (Arr::get($file, 'error') !== true) {
-                $commentUserRepo->createOrUpdate(
-                    ['avatar_id' => $file['data']->id],
-                    ['id' => $request->user()->getKey()]
+                BbComment::getModel()->updateOrCreate(
+                    ['id' => $request->user()->getKey()],
+                    ['avatar_id' => $file['data']->id]
                 );
             }
 

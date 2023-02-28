@@ -3,8 +3,8 @@
 namespace Botble\Comment\Events;
 
 use Botble\Comment\Models\Comment;
-use Botble\Member\Models\Member;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -14,13 +14,7 @@ class NewCommentEvent
     use InteractsWithSockets;
     use SerializesModels;
 
-    public Comment $comment;
-
-    public Member $member;
-
-    public function __construct(Comment $comment, Member $member)
+    public function __construct(public Comment $comment, public Authenticatable $user)
     {
-        $this->comment = $comment;
-        $this->member = $member;
     }
 }

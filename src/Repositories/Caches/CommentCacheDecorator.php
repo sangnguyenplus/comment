@@ -12,7 +12,7 @@ class CommentCacheDecorator extends CacheAbstractDecorator implements CommentInt
         return $this->flushCacheAndUpdateData(__FUNCTION__, func_get_args());
     }
 
-    public function getComments(array $reference = [], int $parentId = 0, int $page = 1, int $limit = 20, string $sort = 'newest')
+    public function getComments(array $reference = [], int|string $parentId = 0, int $page = 1, int $limit = 20, string $sort = 'newest'): array
     {
         return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }

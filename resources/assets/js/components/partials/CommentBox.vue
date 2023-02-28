@@ -101,18 +101,18 @@ export default {
                     ({ data }) => {
                         this.isSending = false;
                         if (!data.error) {
-                            this.value = "";
+                            this.value = '';
                             const textarea = this.$el.querySelector("textarea");
                             this.onSuccess(data.data, false, index);
                             this.error = false;
-                            textarea.value = "";
-                            textarea.classList.remove("focused");
-                            textarea.style.height = "auto";
+                            textarea.value = '';
+                            textarea.classList.remove('focused');
+                            textarea.style.height = 'auto';
                             this.updateCount();
                         } else {
                             this.onSuccess(null, false, -1);
                             this.error =
-                                typeof data.message == "string"
+                                typeof data.message == 'string'
                                     ? data.message
                                     : data.message[
                                           Object.keys(data.message)[0]
@@ -156,14 +156,14 @@ export default {
         },
         defaultValue: {
             type: String,
-            default: ""
+            default: ''
         }
     },
     mounted() {
-        setResizeListeners(this.$el, "textarea");
+        setResizeListeners(this.$el, 'textarea');
 
         if (this.autoFocus) {
-            this.$el.querySelector("textarea").focus();
+            this.$el.querySelector('textarea').focus();
         }
 
         if (this.defaultValue) {
@@ -171,12 +171,12 @@ export default {
         }
     },
     inject: [
-        "getUser",
-        "data",
-        "reference",
-        "postUrl",
-        "updateCount",
-        "openLoginForm"
+        'getUser',
+        'data',
+        'reference',
+        'postUrl',
+        'updateCount',
+        'openLoginForm'
     ]
 };
 </script>

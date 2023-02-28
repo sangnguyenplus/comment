@@ -10,9 +10,9 @@ interface CommentInterface extends RepositoryInterface
 
     public function getComments(
         array $reference = [],
-        int $parentId = 0,
+        int|string $parentId = 0,
         int $page = 1,
         int $limit = 20,
         string $sort = 'newest'
-    );
+    ): array;
 }

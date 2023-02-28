@@ -3,11 +3,12 @@
 namespace Botble\Comment\Http\Controllers\AJAX;
 
 use App\Http\Controllers\Controller;
+use BbComment;
 use Botble\ACL\Traits\RegistersUsers;
 use Botble\Base\Http\Responses\BaseHttpResponse;
-use Botble\Member\Repositories\Interfaces\MemberInterface;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -16,22 +17,15 @@ class RegisterController extends Controller
 
     protected string $redirectTo = '/';
 
-    protected MemberInterface $memberRepository;
-
-    public function __construct(MemberInterface $memberRepository)
-    {
-        $this->memberRepository = $memberRepository;
-    }
-
     public function register(Request $request, BaseHttpResponse $response)
     {
         $this->validator($request->input())->validate();
 
-        event(new Registered($member = $this->create($request->input())));
+        event(new Registered($user = $this->create($request->input())));
 
-        $this->guard()->login($member);
+        $this->guard()->login($user);
 
-        return $this->registered($request, $member, $response)
+        return $this->registered($request, $user, $response)
             ?: $response->setNextUrl($this->redirectPath());
     }
 
@@ -41,7 +35,7 @@ class RegisterController extends Controller
             [
                 'first_name' => 'required|max:255',
                 'last_name' => 'required|max:255',
-                'email' => 'required|email|max:255|unique:members',
+                'email' => 'required|email|max:255|unique:' . BbComment::getModel()->getTable(),
                 'password' => 'required|min:6|confirmed',
             ],
             setting('enable_captcha') && is_plugin_active('captcha') ? ['g-recaptcha-response' => 'required|captcha'] : []
@@ -50,11 +44,11 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-        return $this->memberRepository->create([
+        return BbComment::getModel()->forceCreate([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
         ]);
     }
 

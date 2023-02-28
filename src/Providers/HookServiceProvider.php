@@ -73,10 +73,12 @@ class HookServiceProvider extends ServiceProvider
 
     protected function loadAssets(): void
     {
+        $version = \BbComment::getVersion();
+
         Theme::asset()
             ->container('footer')
             ->usePath(false)
-            ->add('bb-comment', 'vendor/core/plugins/comment/js/comment.js', ['jquery'], [], comment_plugin_version());
+            ->add('bb-comment', 'vendor/core/plugins/comment/js/comment.js', ['jquery'], [], $version);
 
         Theme::asset()
             ->usePath(false)
@@ -85,9 +87,9 @@ class HookServiceProvider extends ServiceProvider
                 'vendor/core/plugins/comment/css/vendor/fontawesome-all.min.css',
                 [],
                 [],
-                comment_plugin_version()
+                $version
             )
-            ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css', [], [], comment_plugin_version());
+            ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css', [], [], $version);
     }
 
     protected function getReference(bool $isBase64 = true): array|string
@@ -105,11 +107,11 @@ class HookServiceProvider extends ServiceProvider
     protected function addSchemas(?string &$html): void
     {
         $schemaJson = [
-            '@context' => 'http://schema.org',
+            '@context' => 'https://schema.org',
             '@type' => 'NewsArticle',
         ];
 
-        if ($this->currentReference && get_class($this->currentReference) === Post::class) {
+        if (get_class($this->currentReference) === Post::class) {
             $post = $this->currentReference;
             $category = $post->categories()->first();
 

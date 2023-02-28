@@ -8,7 +8,7 @@ use Arr;
 
 class CommentRecommendRepository extends RepositoriesAbstract implements CommentRecommendInterface
 {
-    public function getRecommendOfArticle(array $reference, $user)
+    public function getRecommendOfArticle(array $reference, $user): array
     {
         $isRecommended = false;
 

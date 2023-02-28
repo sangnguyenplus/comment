@@ -2,6 +2,7 @@
 
 namespace Botble\Comment\Repositories\Eloquent;
 
+use BaseHelper;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Support\Repositories\Eloquent\RepositoriesAbstract;
@@ -16,18 +17,18 @@ class CommentRepository extends RepositoriesAbstract implements CommentInterface
             $condition = ['id' => $input['comment_id']];
         }
 
-        $input['comment'] = clean($input['comment']);
+        $input['comment'] = BaseHelper::clean($input['comment']);
 
         return $this->createOrUpdate($input, $condition);
     }
 
     public function getComments(
         array $reference = [],
-        int $parentId = 0,
+        int|string $parentId = 0,
         int $page = 1,
         int $limit = 20,
         string $sort = 'newest'
-    ) {
+    ): array {
         $condition = [
             'status' => BaseStatusEnum::PUBLISHED,
             'reference_type' => $reference['reference_type'],

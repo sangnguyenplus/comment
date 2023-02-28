@@ -10,6 +10,7 @@ class CommentLike extends BaseModel
 
     protected $fillable = [
         'user_id',
+        'user_type',
         'comment_id',
     ];
 
