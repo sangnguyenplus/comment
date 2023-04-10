@@ -2,7 +2,7 @@
 
 namespace Botble\Comment\Http\Controllers\AJAX;
 
-use BbComment;
+use Botble\Comment\Facades\BbComment;
 use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Http\Controllers\BaseController;
@@ -90,7 +90,7 @@ class CommentFrontController extends BaseController
         try {
             $reference = json_decode(base64_decode($request->input('reference')), true);
 
-            if (isset($reference['author']) && ! empty($reference['author'])) {
+            if (! empty($reference['author'])) {
                 Comment::$author = app($reference['author']['type'])->where(['id' => $reference['author']['id']])
                     ->first();
             }

@@ -5,6 +5,9 @@ namespace Botble\Comment\Http\Resources;
 use Botble\Comment\Models\Comment;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * @mixin Comment
+ */
 class RepCollection extends ResourceCollection
 {
     public function toArray($request): array

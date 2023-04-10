@@ -2,9 +2,13 @@
 
 namespace Botble\Comment\Http\Resources;
 
+use Botble\Comment\Models\CommentUser;
 use Illuminate\Http\Resources\Json\JsonResource;
 use RvMedia;
 
+/**
+ * @mixin CommentUser
+ */
 class UserResource extends JsonResource
 {
     public function toArray($request): array

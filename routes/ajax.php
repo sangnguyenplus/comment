@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 if (defined('THEME_MODULE_SCREEN_NAME')) {
     Route::group([
         'prefix' => 'ajax/v1/comments',

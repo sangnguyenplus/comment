@@ -2,8 +2,12 @@
 
 namespace Botble\Comment\Http\Resources;
 
+use Botble\Comment\Models\Comment;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Comment
+ */
 class CommentResource extends JsonResource
 {
     public function toArray($request): array

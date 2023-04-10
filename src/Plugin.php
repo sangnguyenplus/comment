@@ -2,12 +2,12 @@
 
 namespace Botble\Comment;
 
-use Schema;
+use Illuminate\Support\Facades\Schema;
 use Botble\PluginManagement\Abstracts\PluginOperationAbstract;
 
 class Plugin extends PluginOperationAbstract
 {
-    public static function remove()
+    public static function remove(): void
     {
         Schema::disableForeignKeyConstraints();
 

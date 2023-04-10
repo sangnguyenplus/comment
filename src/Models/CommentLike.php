@@ -14,7 +14,7 @@ class CommentLike extends BaseModel
         'comment_id',
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -27,7 +27,7 @@ class CommentLike extends BaseModel
         });
     }
 
-    protected static function updateCountLike(CommentLike $like)
+    protected static function updateCountLike(CommentLike $like): void
     {
         $comment = Comment::where(['id' => $like->comment_id])->first();
 

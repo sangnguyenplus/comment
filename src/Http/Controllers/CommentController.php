@@ -3,7 +3,7 @@
 namespace Botble\Comment\Http\Controllers;
 
 use Assets;
-use BbComment;
+use Botble\Comment\Facades\BbComment;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Base\Events\CreatedContentEvent;
@@ -22,11 +22,8 @@ use Illuminate\Http\Request;
 
 class CommentController extends BaseController
 {
-    protected CommentInterface $commentRepository;
-
-    public function __construct(CommentInterface $commentRepository)
+    public function __construct(protected CommentInterface $commentRepository)
     {
-        $this->commentRepository = $commentRepository;
     }
 
     public function index(CommentTable $table)

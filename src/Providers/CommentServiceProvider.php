@@ -2,11 +2,10 @@
 
 namespace Botble\Comment\Providers;
 
-use BbComment;
 use Botble\Base\Supports\Helper;
 use Botble\Base\Traits\LoadAndPublishDataTrait;
 use Botble\Blog\Models\Post;
-use Botble\Comment\Facades\BbCommentFacade;
+use Botble\Comment\Facades\BbComment;
 use Botble\Comment\Models\Comment;
 use Botble\Comment\Models\CommentLike;
 use Botble\Comment\Models\CommentRecommend;
@@ -21,7 +20,6 @@ use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
 use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
 use Botble\Page\Models\Page;
 use EmailHandler;
-use Event;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Events\RouteMatched;
@@ -32,7 +30,7 @@ class CommentServiceProvider extends ServiceProvider
 {
     use LoadAndPublishDataTrait;
 
-    public function register()
+    public function register(): void
     {
         Helper::autoload(__DIR__ . '/../../helpers');
 
@@ -48,14 +46,14 @@ class CommentServiceProvider extends ServiceProvider
             return new CommentRecommendCacheDecorator(new CommentRecommendRepository(new CommentRecommend()));
         });
 
-        AliasLoader::getInstance()->alias('BbComment', BbCommentFacade::class);
+        AliasLoader::getInstance()->alias('BbComment', BbComment::class);
 
         BbComment::setAuthProvider();
 
         $this->configureRateLimiting();
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this->setNamespace('plugins/comment')
             ->loadAndPublishConfigurations(['permissions', 'email'])
@@ -79,7 +77,7 @@ class CommentServiceProvider extends ServiceProvider
             });
         });
 
-        Event::listen(RouteMatched::class, function () {
+        $this->app['events']->listen(RouteMatched::class, function () {
             dashboard_menu()
                 ->registerItem([
                     'id' => 'cms-plugins-comment',
@@ -113,7 +111,7 @@ class CommentServiceProvider extends ServiceProvider
         });
     }
 
-    protected function configureRateLimiting()
+    protected function configureRateLimiting(): void
     {
         RateLimiter::for('comment', function () {
             return Limit::perMinute(20);

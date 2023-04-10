@@ -4,8 +4,9 @@ namespace Botble\Comment\Providers;
 
 use Botble\Base\Models\BaseModel;
 use Botble\Blog\Models\Post;
+use Botble\Comment\Facades\BbComment;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
-use Html;
+use Collective\Html\HtmlFacade as Html;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use MetaBox;
@@ -17,7 +18,7 @@ class HookServiceProvider extends ServiceProvider
 {
     protected ?BaseModel $currentReference = null;
 
-    public function boot()
+    public function boot(): void
     {
         add_shortcode('comment', 'Comment', 'Comment for this article', [$this, 'renderComment']);
         add_action(BASE_ACTION_PUBLIC_RENDER_SINGLE, [$this, 'storageCurrentReference'], 100, 2);
@@ -73,7 +74,7 @@ class HookServiceProvider extends ServiceProvider
 
     protected function loadAssets(): void
     {
-        $version = \BbComment::getVersion();
+        $version = BbComment::getVersion();
 
         Theme::asset()
             ->container('footer')

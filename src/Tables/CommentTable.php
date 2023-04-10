@@ -2,12 +2,12 @@
 
 namespace Botble\Comment\Tables;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Setting\Supports\SettingStore;
 use Botble\Table\Abstracts\TableAbstract;
-use Html;
+use Collective\Html\HtmlFacade as Html;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;

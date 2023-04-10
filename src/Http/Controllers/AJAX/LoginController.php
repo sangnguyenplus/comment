@@ -72,7 +72,9 @@ class LoginController extends Controller
             $request->session()->regenerate();
         }
 
-        return $this->loggedOut($request) ?: redirect('/');
+        $this->loggedOut($request);
+
+        return redirect(route('public.index'));
     }
 
     protected function authenticated(Request $request, $user)

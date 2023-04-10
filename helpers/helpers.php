@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Arr;
+
 if (! function_exists('has_member')) {
     function has_member(): bool
     {

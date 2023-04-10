@@ -3,7 +3,7 @@
 namespace Botble\Comment\Http\Controllers\AJAX;
 
 use App\Http\Controllers\Controller;
-use BbComment;
+use Botble\Comment\Facades\BbComment;
 use Botble\ACL\Traits\RegistersUsers;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Illuminate\Auth\Events\Registered;
@@ -15,8 +15,6 @@ class RegisterController extends Controller
 {
     use RegistersUsers;
 
-    protected string $redirectTo = '/';
-
     public function register(Request $request, BaseHttpResponse $response)
     {
         $this->validator($request->input())->validate();
@@ -25,8 +23,9 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
 
-        return $this->registered($request, $user, $response)
-            ?: $response->setNextUrl($this->redirectPath());
+        $this->registered($request, $user, $response);
+
+        return $response->setNextUrl(route('public.index'));
     }
 
     protected function validator(array $data)
