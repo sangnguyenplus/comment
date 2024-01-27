@@ -2,12 +2,12 @@
 
 namespace Botble\Comment\Http\Controllers\AJAX;
 
-use Botble\Comment\Facades\BbComment;
 use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Comment\Events\NewCommentEvent;
+use Botble\Comment\Facades\BbComment;
 use Botble\Comment\Http\Resources\CommentResource;
 use Botble\Comment\Http\Resources\UserResource;
 use Botble\Comment\Models\Comment;

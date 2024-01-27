@@ -2,8 +2,8 @@
 
 namespace Botble\Comment\Repositories\Caches;
 
-use Botble\Support\Repositories\Caches\CacheAbstractDecorator;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
+use Botble\Support\Repositories\Caches\CacheAbstractDecorator;
 
 class CommentCacheDecorator extends CacheAbstractDecorator implements CommentInterface
 {

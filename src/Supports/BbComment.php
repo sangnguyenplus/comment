@@ -3,10 +3,9 @@
 namespace Botble\Comment\Supports;
 
 use BaseHelper;
-use Botble\ACL\Models\User;
 use Botble\Base\Models\BaseModel;
 use Botble\Comment\Models\CommentUser;
-use Botble\Member\Models\Member;
+use Hash;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Arr;
 
@@ -14,14 +13,6 @@ class BbComment
 {
     public function getModel(): Authenticatable|BaseModel
     {
-        if (is_plugin_active('member')) {
-            return new Member();
-        }
-
-        if (auth()->check()) {
-            return new User();
-        }
-
         return new CommentUser();
     }
 
@@ -52,6 +43,26 @@ class BbComment
     {
         $user = $this->getCurrentUser();
 
+        if (! auth(COMMENT_GUARD)->check()) {
+            if (is_plugin_active('member') && auth('member')->check()) {
+                $user = auth('member')->user();
+            } else {
+                $user = auth()->user();
+            }
+
+            if ($user) {
+                $userComment = $this->getModel()->firstWhere(['email' => $user->email]);
+                if (! isset($userComment)) {
+                    $user = $this->getModel()->forceCreate([
+                        'first_name' => $user['first_name'],
+                        'last_name' => $user['last_name'],
+                        'email' => $user['email'],
+                        'password' => Hash::make($user['password']),
+                    ]);
+                }
+            }
+        }
+
         if ($user && ! auth(COMMENT_GUARD)->check()) {
             auth(COMMENT_GUARD)->loginUsingId($user->getAuthIdentifier());
 
@@ -63,14 +74,6 @@ class BbComment
 
     public function getCurrentUser(): Authenticatable|null
     {
-        if (auth(COMMENT_GUARD)->check()) {
-            return auth(COMMENT_GUARD)->user();
-        }
-
-        if (is_plugin_active('member')) {
-            return auth('member')->user();
-        }
-
-        return auth()->user();
+        return auth(COMMENT_GUARD)->user();
     }
 }

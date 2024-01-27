@@ -56,16 +56,7 @@ class CommentRepository extends RepositoriesAbstract implements CommentInterface
                 'per_page' => $limit,
                 'current_paged' => $page,
             ],
-            'select' => [
-                'id',
-                'comment',
-                'user_id',
-                'ip_address',
-                'created_at',
-                'reply_count',
-                'like_count',
-                'parent_id',
-            ],
+            'with' => ['user'],
         ];
 
         $count = -1;
