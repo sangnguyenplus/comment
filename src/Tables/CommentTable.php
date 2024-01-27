@@ -2,7 +2,6 @@
 
 namespace Botble\Comment\Tables;
 
-use Illuminate\Support\Facades\Auth;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Setting\Supports\SettingStore;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class CommentTable extends TableAbstract
@@ -51,7 +51,7 @@ class CommentTable extends TableAbstract
                     $item->reference->url . '#bb-comment',
                     $item->reference->name,
                     ['target' => '_blank']
-                ) : '';
+                ) : '&mdash;';
             })
             ->editColumn('user', function ($item) {
                 return $item->user ? $item->user->name : 'Guest';

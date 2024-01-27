@@ -84,7 +84,7 @@ class CommentServiceProvider extends ServiceProvider
                     'priority' => 5,
                     'parent_id' => null,
                     'name' => 'plugins/comment::comment.name',
-                    'icon' => version_compare(get_cms_version(), '7.0.0', '<') ? 'fa fa-comments' : 'ti ti-message-circle-2',
+                    'icon' => version_compare(get_core_version(), '7.0.0', '<') ? 'fa fa-comments' : 'ti ti-message-circle-2',
                     'url' => route('comment.index'),
                     'permissions' => ['comment.index'],
                 ])
