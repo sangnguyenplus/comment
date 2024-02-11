@@ -5,7 +5,7 @@
     "provider": "Botble\\Comment\\Providers\\CommentServiceProvider",
     "author": "Sang Nguyen",
     "url": "https://sangplus.com",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "minimum_core_version": "6.0.0",
     "description": "Ajax Comments"
 }
