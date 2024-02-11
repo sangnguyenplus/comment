@@ -97,6 +97,10 @@ class HookServiceProvider extends ServiceProvider
     {
         $slug = SlugHelper::getSlug(request()->route('slug'));
 
+        if (! $slug) {
+            return '';
+        }
+
         $reference = [
             'reference_type' => $slug->reference_type,
             'reference_id' => $slug->reference_id,
