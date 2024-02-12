@@ -68,9 +68,11 @@ class CommentServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $this->app->register(HookServiceProvider::class);
 
-            Post::resolveRelationUsing('comments', function ($model) {
-                return $model->morphMany(Comment::class, 'reference');
-            });
+            if (is_plugin_active('blog')) {
+                Post::resolveRelationUsing('comments', function ($model) {
+                    return $model->morphMany(Comment::class, 'reference');
+                });   
+            }
 
             Page::resolveRelationUsing('comments', function ($model) {
                 return $model->morphMany(Comment::class, 'reference');
